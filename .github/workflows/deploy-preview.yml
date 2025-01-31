@@ -10,13 +10,13 @@ jobs:
 
     steps:
 
-    -name : Say Hello
-    run: echo "Hello World"
+      - name : Say Hello
+        run: echo "Hello World"
 
-    -name : Show Var
-    run: echo "VAR ::::::: ${{ github.ref }}"
+      - name : Show Var
+        run: echo "VAR ::::::: ${{ github.ref }}"
 
-    -name : RUN SCRIPT
-    run: |
+      - name : RUN SCRIPT
+        run: |
           echo "THIS IS MULTIMPLE SCRIPT NUM 1"
-           echo "THIS IS MULTIMPLE SCRIPT NUM 2"
+          echo "THIS IS MULTIMPLE SCRIPT NUM 2"
