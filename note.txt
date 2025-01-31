@@ -1,0 +1,2 @@
+gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp .
+gcloud run deploy flask-tp --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp
