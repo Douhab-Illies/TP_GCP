@@ -35,15 +35,20 @@ jobs:
 
       - name: Build image cloud
         run: gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp-ci-cd .
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
 
       - name: Build deploy
         run: gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
+
 
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan 
+        run: terraform plan
 
 
       - name: Terraform Apply
