@@ -10,6 +10,8 @@ app = Flask(__name__)
 LOCAL_JSON_FILE = 'notes.json'
 BUCKET_NAME = os.getenv("BUCKET")
 
+print(f"BUCKET_NAME: '{BUCKET_NAME}'")
+
 if BUCKET_NAME is None:
     print("LA VARIABLE BUCKET EST VIDE !!!!!!")
     exit()
