@@ -10,21 +10,23 @@ app = Flask(__name__)
 LOCAL_JSON_FILE = 'notes.json'
 BUCKET_NAME = os.getenv("BUCKET")
 
-
-if BUCKET_NAME == None :
-	print("LA VARIABLE EST VIDE !!!!!!")
-	exit()
-
-
+if BUCKET_NAME is None:
+    print("LA VARIABLE BUCKET EST VIDE !!!!!!")
+    exit()
 
 # Gestion des notes locales
+def ensure_local_file():
+    """Vérifie si le fichier local existe, sinon le crée avec une liste vide."""
+    if not os.path.exists(LOCAL_JSON_FILE):
+        with open(LOCAL_JSON_FILE, 'w') as file:
+            json.dump([], file)
+        print(f"{LOCAL_JSON_FILE} créé avec une liste vide.")
+
 def load_notes():
     """Charge les notes depuis le fichier JSON local."""
-    try:
-        with open(LOCAL_JSON_FILE, 'r') as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []
+    ensure_local_file()
+    with open(LOCAL_JSON_FILE, 'r') as file:
+        return json.load(file)
 
 def save_notes(notes):
     """Sauvegarde les notes dans le fichier JSON local."""
@@ -36,32 +38,37 @@ def get_storage_client():
     """Initialise le client Google Cloud Storage."""
     return storage.Client()
 
+def ensure_bucket_file():
+    """Vérifie si le fichier JSON existe dans le bucket, sinon l'initialise."""
+    client = get_storage_client()
+    bucket = client.bucket(BUCKET_NAME)
+    blob = bucket.blob(LOCAL_JSON_FILE)
+
+    if not blob.exists():
+        ensure_local_file()
+        blob.upload_from_filename(LOCAL_JSON_FILE, content_type='application/json')
+        print(f"Fichier {LOCAL_JSON_FILE} créé et uploadé dans le bucket.")
+
 def list_notes_from_bucket():
     """Récupère les notes depuis le bucket Google Cloud Storage."""
+    ensure_bucket_file()
     client = get_storage_client()
     bucket = client.bucket(BUCKET_NAME)
-    blobs = bucket.list_blobs()
-    notes = []
-    for blob in blobs:
-        content = blob.download_as_text()
-        note = json.loads(content)
-        notes.append(note)
+    blob = bucket.blob(LOCAL_JSON_FILE)
 
-    return notes
+    content = blob.download_as_text()
+    return json.loads(content) if content else []
 
-def save_note_to_bucket(note):
-    """Enregistre une note dans le bucket Google Cloud Storage."""
+def save_notes_to_bucket(notes):
+    """Enregistre les notes dans le bucket Google Cloud Storage."""
     client = get_storage_client()
     bucket = client.bucket(BUCKET_NAME)
-    note_id = str(uuid4())  # Génère un ID unique pour chaque note
-    blob = bucket.blob(f"{note_id}.json")
-    blob.upload_from_string(json.dumps(note), content_type='application/json')
+    blob = bucket.blob(LOCAL_JSON_FILE)
+    blob.upload_from_string(json.dumps(notes, indent=4), content_type='application/json')
 
-# Routes Flask
 @app.route('/')
 def index():
     """Affiche la liste des notes."""
-    # Changez `list_notes_from_bucket` par `load_notes` si vous voulez des notes locales
     notes = list_notes_from_bucket()
     return render_template('index.html', notes=notes)
 
@@ -72,16 +79,22 @@ def add_note():
         title = request.form['title']
         content = request.form['content']
         note = {"id": str(uuid4()), "title": title, "content": content}
-        # Changez `save_note_to_bucket` par `save_note` pour sauvegarder localement
-        save_note_to_bucket(note)
+
+        notes = list_notes_from_bucket()
+        notes.append(note)
+        save_notes_to_bucket(notes)
+
         return redirect(url_for('index'))
     return render_template('add_note.html')
 
 @app.route('/delete/<note_id>', methods=['POST'])
 def delete(note_id):
-    """Supprime une note."""
-    # Fonction à implémenter pour supprimer une note dans le bucket si nécessaire.
+    """Supprime une note du bucket."""
+    notes = list_notes_from_bucket()
+    notes = [note for note in notes if note["id"] != note_id]
+    save_notes_to_bucket(notes)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)
+

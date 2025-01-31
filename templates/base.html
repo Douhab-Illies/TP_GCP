@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1><a href="{{ url_for('index') }}">Notes App</a></h1>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+
+
