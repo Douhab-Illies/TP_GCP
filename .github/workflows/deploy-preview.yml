@@ -36,10 +36,10 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Build image cloud
-        run: gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp-ci-cd . --service-account=github@python-flask-443908.iam.gserviceaccount.com
+        run: gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp-ci-cd .
 
       - name: Build deploy
-        run: gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd --service-account=github@python-flask-443908.iam.gserviceaccount.com
+        run: gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd
 
 
       - name: Terraform Init
