@@ -4,19 +4,38 @@ on:
       - main
 
 
+
 jobs:
-  say-hello:
+  terraform_apply:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name : Say Hello
-        run: echo "Hello World"
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
 
-      - name : Show Var
-        run: echo "VAR is ${{ github.ref }}"
+      - name: Install the gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GOOGLE_PROJECT }}
+          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
+          export_default_credentials: true
+          #version: '>= 363.0.0'
 
-      - name : RUN SCRIPT
-        run: |
-          echo "THIS IS MULTIMPLE SCRIPT NUM 1"
-          echo "THIS IS MULTIMPLE SCRIPT NUM 2"
+
+      - name: Authenticate with Google Cloud Platform
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
+
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
