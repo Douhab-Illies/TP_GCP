@@ -14,7 +14,7 @@ jobs:
         run: echo "Hello World"
 
       - name : Show Var
-        run: echo "VAR ::::::: ${{ github.ref }}"
+        run: echo "VAR is ${{ github.ref }}"
 
       - name : RUN SCRIPT
         run: |
