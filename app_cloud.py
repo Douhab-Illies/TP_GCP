@@ -11,7 +11,7 @@ LOCAL_JSON_FILE = 'notes.json'
 BUCKET_NAME = os.getenv("BUCKET")
 
 
-if BUCKET_NAME == None :
+if BUCKET_NAME == None or BUCKET_NAME == "" :
 	print("LA VARIABLE EST VIDE !!!!!!")
 	exit()
 
