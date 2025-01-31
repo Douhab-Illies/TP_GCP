@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    -name : Say Hello
+    run: echo "Hello World"
+
+    -name : Show Var
+    run: echo "VAR ::::::: ${{ github.ref }}"
+
+    -name : RUN SCRIPT
+    run: |
+          echo "THIS IS MULTIMPLE SCRIPT NUM 1"
+           echo "THIS IS MULTIMPLE SCRIPT NUM 2"
