@@ -35,7 +35,7 @@ resource "google_project_iam_binding" "cloud_run_access" {
 }
 
 # Attribution des droits IAM au Service Account
-resource "google_project_iam_binding" "cloud_run_access" {
+resource "google_project_iam_binding" "cloud_run_access_2" {
   project = var.ID
 #  role    = ["roles/storage.objectViewer,"roles/storage.objectCreator","roles/storage.objectUser"]
   role   = "roles/storage.objectCreator"
@@ -44,7 +44,7 @@ resource "google_project_iam_binding" "cloud_run_access" {
 }
 
 # Attribution des droits IAM au Service Account
-resource "google_project_iam_binding" "cloud_run_access" {
+resource "google_project_iam_binding" "cloud_run_access_3" {
   project = var.ID
 #  role    = ["roles/storage.objectViewer","roles/storage.objectCreator","roles/storage.objectUser"]
 #  role   = "roles/storage.objectCreator"
