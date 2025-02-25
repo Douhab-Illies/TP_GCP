@@ -18,6 +18,7 @@ resource "google_storage_bucket" "sto_illies" {
   }
 }
 
+
 # Création du Service Account
 resource "google_service_account" "cloud_run_sa" {
   account_id   = "cloud-run-sa"

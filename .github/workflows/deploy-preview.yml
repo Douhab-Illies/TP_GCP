@@ -3,12 +3,13 @@ on:
     branches:
       - main
 
-env:
-  BUCKET_NAME: sto-illies-terr 
 
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
+
+    env:
+      BUCKET: "sto-illies-terr-cicd"
 
     steps:
       - name: Checkout code
