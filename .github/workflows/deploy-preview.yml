@@ -5,7 +5,6 @@ on:
 
 
 
-
 env:
   BUCKET: sto-illies-terr-cicd
 
@@ -45,7 +44,7 @@ jobs:
         run: gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp-ci-cd .
 
       - name: Build deploy
-        run: BUCKET=sto-illies-terr-cicd gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd
+        run: export BUCKET=sto-illies-terr-cicd && gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd
 
 
       - name: Terraform Init
