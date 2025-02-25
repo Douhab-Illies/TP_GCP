@@ -1,0 +1,23 @@
+name: Publish On CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Choose where you want to publish the build'
+        required: true
+        default: AppTester
+        type: choice
+
+env:
+  ANDROID_KEYS_FOLDER: ..
+
+
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Terraform remove
+        run: terraform destroy -auto-approve
