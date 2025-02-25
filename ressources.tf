@@ -28,8 +28,8 @@ resource "google_service_account" "cloud_run_sa" {
 # Attribution des droits IAM au Service Account
 resource "google_project_iam_binding" "cloud_run_access" {
   project = var.ID
-  role    = "roles/storage.objectViewer"
-  role	  = "roles/storage.objectCreator"
+  role    = ["roles/storage.objectViewer","roles/storage.objectCreator","roles/storage.objectUser"]
+#  role	  = "roles/storage.objectCreator"
 #  role    = "roles/storage.objectUser"
   members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
 }
