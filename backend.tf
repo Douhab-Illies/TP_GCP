@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket  =  "${var.SAVE_BUCKET}"
+    bucket  =  "tfstate-illies"
     prefix  = "terraform/state"
   }
 }
