@@ -29,25 +29,19 @@ resource "google_service_account" "cloud_run_sa" {
 resource "google_project_iam_binding" "cloud_run_access" {
   project = var.ID
   role    = "roles/storage.objectViewer"
-#  role	  = "roles/storage.objectCreator"
-#  role    = "roles/storage.objectUser"
   members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
 }
 
 # Attribution des droits IAM au Service Account
 resource "google_project_iam_binding" "cloud_run_access_2" {
   project = var.ID
-#  role    = ["roles/storage.objectViewer,"roles/storage.objectCreator","roles/storage.objectUser"]
   role   = "roles/storage.objectCreator"
-#  role    = "roles/storage.objectUser"
   members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
 }
 
 # Attribution des droits IAM au Service Account
 resource "google_project_iam_binding" "cloud_run_access_3" {
   project = var.ID
-#  role    = ["roles/storage.objectViewer","roles/storage.objectCreator","roles/storage.objectUser"]
-#  role   = "roles/storage.objectCreator"
   role    = "roles/storage.objectUser"
   members = ["serviceAccount:${google_service_account.cloud_run_sa.email}"]
 }
