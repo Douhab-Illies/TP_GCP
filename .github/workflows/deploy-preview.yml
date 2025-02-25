@@ -2,17 +2,23 @@ on:
   push:
     branches:
       - main
-
-
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose action: deploy or destroy"
+        required: true
+        default: "deploy"
+        type: choice
+        options:
+          - deploy
+          - destroy
 
 env:
   BUCKET: sto-illies-terr-cicd
 
-
 jobs:
-  terraform_apply:
+  terraform:
     runs-on: ubuntu-latest
-
 
     steps:
       - name: Checkout code
@@ -29,24 +35,15 @@ jobs:
           project_id: ${{ secrets.GOOGLE_PROJECT }}
           service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
           export_default_credentials: true
-          #version: '>= 363.0.0'
-
 
       - name: Authenticate with Google Cloud Platform
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PYTHON_FLASK }}
 
-#      - name: Configure Docker (si nécessaire)
-#        run: gcloud auth configure-docker
-
       - name: Build image cloud
+        if: github.event.inputs.action == 'deploy' || github.event_name == 'push'
         run: gcloud builds submit --tag gcr.io/python-flask-443908/flask-tp-ci-cd .
-
-#      - name: Build deploy
-#        run: export BUCKET=sto-illies-terr-cicd && gcloud run deploy flask-tp-ci-cd --platform managed --region europe-west10 --image gcr.io/python-flask-443908/flask-tp-ci-cd
-
-
 
       - name: Terraform Init
         run: terraform init -migrate-state
@@ -54,6 +51,10 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-
       - name: Terraform Apply
+        if: github.event.inputs.action == 'deploy' || github.event_name == 'push'
         run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: github.event.inputs.action == 'destroy'
+        run: terraform destroy -auto-approve
