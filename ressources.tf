@@ -49,8 +49,8 @@ resource "google_cloud_run_service" "app_service" {
       containers {
         image = "gcr.io/${var.ID}/flask-tp-ci-cd"
         env {
-          name  = var.BUCKET
-          value = google_storage_bucket.sto_illies.name
+          name  = "BUCKET"
+          value = var.BUCKET
         
 	}
 
