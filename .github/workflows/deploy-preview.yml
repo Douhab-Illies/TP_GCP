@@ -4,12 +4,16 @@ on:
       - main
 
 
+
+
+env:
+  BUCKET: sto-illies-terr-cicd
+
+
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
 
-    env:
-      BUCKET: "sto-illies-terr-cicd"
 
     steps:
       - name: Checkout code
