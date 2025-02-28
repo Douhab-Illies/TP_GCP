@@ -76,10 +76,6 @@ CMD ["python3", "/opt/app/app_chemin.py"]
 
 l'applciation tourne bien sur le cloud et répuère les information apres /app/ :
 
-
-
-
-
 ```Python3
 from flask import Flask
 
@@ -93,6 +89,22 @@ if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)
 ```
 
+
+
+## Lien de l'application :
+
+voici le lien de l'application 
+
+https://cloud-run-app-jjnfm7mdya-ez.a.run.app/
+
+pour faire un test :
+https://cloud-run-app-jjnfm7mdya-ez.a.run.app/app/test
+
+la page devrai afficher  :
+
+```txt
+Hello test!
+```
 
 
 
