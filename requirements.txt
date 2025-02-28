@@ -1,3 +1,1 @@
-Flask==2.2.3
-werkzeug==2.2.2
-google-cloud-storage
+Flask==3.0.0
